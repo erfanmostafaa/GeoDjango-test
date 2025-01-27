@@ -3,7 +3,8 @@
 services:
   app:
     container_name: app
-    image: registry.sedrehgroup.ir/eye_of_develop_app:latest
+    image: registry.sedrehgroup.ir/geodjango:latest
+
     ports:
       - "8000:8000"
     restart: 'always'

@@ -22,13 +22,10 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(required=True, write_only=True)
 
-    class Meta:
-        model = User
-        fields = ['username', 'password']
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)  
+    password = serializers.CharField(required=True, write_only=True)  # 'password' field
 
     def validate(self, attrs):
         username = attrs.get('username')
@@ -37,6 +34,7 @@ class LoginSerializer(serializers.ModelSerializer):
         user = User.objects.filter(username=username).first()
         if not user or not user.check_password(password):
             raise serializers.ValidationError("Invalid username or password.")
+        
         if not user.is_active:
             raise serializers.ValidationError("User is not active.")
         

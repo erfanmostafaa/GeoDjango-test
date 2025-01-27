@@ -31,3 +31,9 @@ class User(models.Model):
 
     def has_module_perms(self, app_label):
         return self.is_staff
+    @property
+    def is_anonymous(self):
+             return False
+    @property
+    def is_authenticated(self):
+        return True  
