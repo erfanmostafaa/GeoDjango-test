@@ -1,16 +1,15 @@
-from django.shortcuts import render
-from .models import Book, Purchase  # Ensure correct import from the models
+from library.models import Book, Purchase  
 from .serializers import BookSerializers, PurchaseSerializer
 from rest_framework import generics, permissions
 
 class BookListView(generics.ListAPIView):
-    queryset = Book.objects.filter(available=True)  # Corrected the typo in 'available'
+    queryset = Book.objects.filter(available=True)  
     serializer_class = BookSerializers
     permission_classes = [permissions.IsAuthenticated]
 
 
 class PurchaseBookView(generics.CreateAPIView):
-    queryset = Purchase.objects.all()  # Fixed the typo here
+    queryset = Purchase.objects.all()  
     serializer_class = PurchaseSerializer
     permission_classes = [permissions.IsAuthenticated]
 
