@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'conf.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'conf.wsgi.application'
 
 
 # Database
@@ -78,12 +78,12 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        "NAME": os.getenv("POSTGRES_DATABASE"),
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',  
+        "NAME": os.getenv("POSTGRES_DATABASE"), 
         "USER": os.getenv("POSTGRES_USERNAME"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
+        "PORT": os.getenv("DB_PORT", "5432"), 
     }
 }
 
