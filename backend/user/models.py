@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.gis.db import models as gis_models
+
 
 class User(models.Model):
     first_name = models.CharField(max_length=20, null=True, blank=True)
@@ -13,6 +15,10 @@ class User(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    
+
+    location = gis_models.PointField(null=True , blank=True)
+
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
