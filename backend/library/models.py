@@ -1,6 +1,6 @@
 from django.db import models
 from user.models import User
-
+from django.contrib.gis.db import models as gis_models
 
 
 class Book(models.Model):
@@ -24,4 +24,26 @@ class Purchase(models.Model):
     
 
 
-    
+
+
+
+
+class Province(models.Model):
+    objectid = models.IntegerField(null=True , blank=True)
+    area = models.FloatField(null=True , blank=True)
+    perimeter = models.FloatField(null=True , blank=True)
+    pzanj_field = models.FloatField(null=True , blank=True)
+    pzanj_id = models.FloatField(null=True , blank=True)
+    sourcethm = models.CharField(max_length=16 ,null=True , blank=True)
+    acres = models.FloatField(null=True , blank=True)
+    shape_leng = models.FloatField(null=True , blank=True)
+    shape_area = models.FloatField(null=True , blank=True)
+    ostn_name = models.CharField(max_length=20 ,null=True , blank=True)
+    code = models.IntegerField(null=True , blank=True)
+    areaasss = models.CharField(max_length=50 ,null=True , blank=True)
+    areaaqqqqq = models.FloatField(null=True , blank=True)
+    per = models.FloatField(null=True , blank=True)
+    codeddd = models.IntegerField(null=True , blank=True)
+    ara = models.FloatField(null=True , blank=True)
+    geom = gis_models.MultiPolygonField(srid=4326 ,null=True , blank=True)
+
