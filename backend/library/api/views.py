@@ -6,6 +6,9 @@ from rest_framework.generics import CreateAPIView ,ListAPIView ,DestroyAPIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
 from rest_framework import status
+from utils import GeoServerManager
+from rest_framework.views import APIView
+
 
 
 class BookListView(ListAPIView):
@@ -74,3 +77,66 @@ class ReturnBookView(DestroyAPIView):
         book.save()
 
         instance.delete()
+
+
+
+
+class GeoServerManagerView(APIView):
+    # permission_classes = [IsAuthenticated]
+
+
+    def post(self , request, *args, **kwargs):
+        workspacename = request.data.get('workspace_name')
+
+        if not workspacename:
+            raise ValidationError("Workspace name is  required.")
+        
+        geo_manager = GeoServerManager()
+        try:
+            geo_manager.create_workspace(workspacename)
+            return Response ({"message": f"Workspace '{workspacename}' created or already existes"} , status=status.HTTP_201_CREATED)
+        except Exception as e :
+            return Response({"error" : str(e) } , status=status.HTTP_400_BAD_REQUEST)
+        
+    
+
+class GeoServerDatastoreView(APIView):
+    # permission_classes = [IsAuthenticated]
+
+    def post(self , request , *args, **kwargs):
+        workspace_name = request.data.get('workspace_name')
+        datastore_name = request.data.get('datastore_name')
+        db_config = request.data.get('db_config')
+
+
+        if not workspace_name  or not datastore_name or not db_config:
+            raise ValidationError ("Workspace name, datastore name, and db_config are required.")
+        
+
+        geo_manager = GeoServerManager()
+        try:
+            geo_manager.create_postgis_datastore(workspace_name, datastore_name, db_config)
+            return Response({"message": f"PostGIS datastore '{datastore_name}' created in workspace '{workspace_name}'."}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+
+class GeoServerPublishLayerView(APIView):
+    # permission_classes = [IsAuthenticated]
+
+    def post(self , request , *args, **kwargs):
+        workspace_name = request.data.get('workspace_name')
+        datastore_name = request.data.get('datastore_name')
+        layer_name = request.data.get('layer_name')
+
+        if not workspace_name or not datastore_name or not layer_name:
+            raise ValidationError("Workspace name, datastore name, and layer name are required.")
+
+        geo_manager = GeoServerManager()
+        try:
+            geo_manager.publish_layer(workspace_name, datastore_name, layer_name)
+            return Response({"message": f"Layer '{layer_name}' published in datastore '{datastore_name}'."}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
