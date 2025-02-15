@@ -82,7 +82,6 @@ class ReturnBookView(DestroyAPIView):
 
 
 class GeoServerManagerView(APIView):
-    # permission_classes = [IsAuthenticated]
 
 
     def post(self , request, *args, **kwargs):
@@ -101,7 +100,6 @@ class GeoServerManagerView(APIView):
     
 
 class GeoServerDatastoreView(APIView):
-    # permission_classes = [IsAuthenticated]
 
     def post(self , request , *args, **kwargs):
         workspace_name = request.data.get('workspace_name')
@@ -124,7 +122,6 @@ class GeoServerDatastoreView(APIView):
 
 
 class GeoServerPublishLayerView(APIView):
-    # permission_classes = [IsAuthenticated]
 
     def post(self , request , *args, **kwargs):
         workspace_name = request.data.get('workspace_name')
@@ -140,3 +137,29 @@ class GeoServerPublishLayerView(APIView):
             return Response({"message": f"Layer '{layer_name}' published in datastore '{datastore_name}'."}, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class GeoserverUploadRasterView(APIView):
+    def post(self, request, *args, **kwargs):
+        workspace_name = request.data.get('workspace_name')
+        raster_name = request.data.get('raster_name')
+        raster_file = request.data.get('raster_file')
+
+
+        if not workspace_name or not raster_file or not raster_name : 
+            raise ValidationError ("Workspace name , raster name and raster file not required.")
+        
+
+
+        geo_manager = GeoServerManager()
+        try :
+            raster_file_path = geo_manager.upload_raster(workspace_name , raster_file , raster_name)
+
+            geo_manager.publish_layer(workspace_name , raster_name , raster_file_path )
+
+            return Response ({"message" : f"Raster'{raster_name}' uploaded and published in workspace '{workspace_name}'." }, status=status.HTTP_201_CREATED),
+        
+        except Exception as e:
+                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
