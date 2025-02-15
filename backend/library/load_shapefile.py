@@ -23,7 +23,7 @@ world_mapping = {
 
 }
 
-province_shape = "/tmp/Province/province.shp"
+province_shape = "/home/Province/province.shp"
 
 
 def run(verbose=True):

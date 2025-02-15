@@ -2,7 +2,9 @@ django
 djangorestframework
 django-filter
 pillow
-psycopg2-binary
 djangorestframework-simplejwt
 psycopg2
-
+psycopg2-binary
+python-dotenv
+requests
+geoserver-restconfig
